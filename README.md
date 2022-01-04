@@ -31,6 +31,6 @@ repeater_minlen = 1  # 触发复读的文本消息最小长度（表情和图片
     <img src="https://img.shields.io/badge/nonebot-v2-red" alt="nonebot">
   </a> 
   
-  <a href="https://github.com/Utmost-Happiness-Planet/uhpstatus/releases">
+  <a href="">
     <img src="https://img.shields.io/badge/release-v1.0-blueviolet" alt="release">
 </a>
