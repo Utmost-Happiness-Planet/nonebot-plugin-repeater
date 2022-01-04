@@ -25,7 +25,9 @@ async def repeater(bot: Bot, event: GroupMessageEvent, state: T_State):
     global last_message, has_repeated
     gid = str(event.group_id)
     if gid in repeater_group:
+        logger.debug(event.message)
         mt = messageType(str(event.message))
+        logger.debug(mt)
         # 对不同类别的消息处理方式不同，图片是最麻烦的
         if mt == "Normal" and event.message == last_message.get(gid) and len(str(event.message)) >= shortest:
             data = event.message
@@ -41,7 +43,7 @@ async def repeater(bot: Bot, event: GroupMessageEvent, state: T_State):
             last_message[gid] = str(event.message).split(",")[1]
         else:
             last_message[gid] = event.message
-
+        logger.debug(str(data))
         # 如果这条消息已经复读过了就不参与复读了
         if not has_repeated.get(gid) and data is not None:
             has_repeated[gid] = True
