@@ -1,6 +1,7 @@
 from nonebot import get_driver, on_message, logger
-from nonebot.adapters.cqhttp import Bot, GroupMessageEvent, MessageSegment
+from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent, MessageSegment
 from nonebot.typing import T_State
+from nonebot.params import State
 import re
 
 repeater_group = get_driver().config.repeater_group
@@ -27,7 +28,7 @@ def getPicMeta(message: str):
 
 
 @m.handle()
-async def repeater(bot: Bot, event: GroupMessageEvent, state: T_State):
+async def repeater(bot: Bot, event: GroupMessageEvent, state: T_State = State()):
     global last_message, has_repeated
     gid = str(event.group_id)
     if gid in repeater_group:
