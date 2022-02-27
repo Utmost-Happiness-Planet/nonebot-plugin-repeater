@@ -3,9 +3,9 @@ from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent, MessageSegment
 from nonebot.typing import T_State
 from nonebot.params import State
 import re
-
-repeater_group = get_driver().config.repeater_group
-shortest = get_driver().config.repeater_minlen
+config = get_driver().config.dict()
+repeater_group = config.get('repeater_group',[])
+shortest = config.get('repeater_minlen',[])
 
 m = on_message(priority=10, block=False)
 
