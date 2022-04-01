@@ -23,6 +23,6 @@ setup(
     python_requires=">=3.7",
     install_requires=[
         "nonebot2 >= 2.0.0b2",
-        "nonebot2-adapter-onebot >= 2.0.0b1
+        "nonebot2-adapter-onebot >= 2.0.0b1"
     ]
 )
