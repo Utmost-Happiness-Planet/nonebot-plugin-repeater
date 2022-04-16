@@ -37,5 +37,5 @@ repeater_min_message_times = 2  # 触发复读的消息次数
   </a> 
   
   <a href="">
-    <img src="https://img.shields.io/badge/release-v1.0-blueviolet" alt="release">
+    <img src="https://img.shields.io/badge/release-v3.0-blueviolet" alt="release">
 </a>
