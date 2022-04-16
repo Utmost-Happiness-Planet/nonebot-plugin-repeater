@@ -1,67 +1,44 @@
-from nonebot import get_driver, on_message, logger
-from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent, MessageSegment
-from nonebot.typing import T_State
-from nonebot.params import State
+from nonebot import on_message, logger
+from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent
+from . import config
 import re
-config = get_driver().config.dict()
-repeater_group = config.get('repeater_group',[])
-shortest = config.get('repeater_minlen',[])
+
+repeater_group = config.repeater_group
+shortest = config.shortest_length
 
 m = on_message(priority=10, block=False)
 
 last_message = {}
-has_repeated = {}
+message_times = {}
 
 
-# 消息类型判别 - 分类普通文本消息、QQ表情、图片
-def messageType(message: str):
-    if message[0] == "[":
-        data = message.split(",")
-        return data[0][1:]
-    else:
-        return "Normal"
-
-
-# 获取图片消息的url与hash
-def getPicMeta(message: str):
-    return re.findall("url=(.*?)[,|\]]", message)[0], re.findall("file=(.*?)[,|\]]", message)[0]
+# 消息预处理
+def messagePreprocess(message: str):
+    raw_message = message
+    contained_images = {}
+    images = re.findall(r'\[CQ:image.*?]', message)
+    for i in images:
+        contained_images.update({i: [re.findall(r'\[.*url=(.*?),.*]', i)[0], re.findall(r'\[.*file=(.*?),.*]', i)[0]]})
+    for i in contained_images:
+        message = message.replace(i, f'[{contained_images[i][1]}]')
+    return message, raw_message
 
 
 @m.handle()
-async def repeater(bot: Bot, event: GroupMessageEvent, state: T_State = State()):
-    global last_message, has_repeated
+async def repeater(bot: Bot, event: GroupMessageEvent):
     gid = str(event.group_id)
     if gid in repeater_group:
-        logger.debug(event.message)
-        mt = messageType(str(event.message))
-        logger.debug(mt)
-
-        # 对不同类别的消息处理方式不同，图片是最麻烦的
-        data = None
-        if mt == "Normal":
-            if event.message == last_message.get(gid) and len(str(event.message)) >= shortest:
-                data = event.message
-            else:
-                has_repeated[gid] = False
-            last_message[gid] = event.message
-        elif mt == "CQ:face":
-            if event.message == last_message.get(gid):
-                data = event.message
-            else:
-                has_repeated[gid] = False
-            last_message[gid] = event.message
-        elif mt == "CQ:image":
-            meta = getPicMeta(str(event.message))  # 图片消息元数据
-            if meta[1] == last_message.get(gid):
-                data = MessageSegment.image(meta[0])
-            else:
-                has_repeated[gid] = False
-            last_message[gid] = meta[1]
+        global last_message, message_times
+        message, raw_message = messagePreprocess(str(event.message))
+        logger.debug(f'这一次消息: {message}')
+        logger.debug(f'上一次消息: {last_message.get(gid)}')
+        if last_message.get(gid) != message:
+            message_times[gid] = 1
         else:
-            last_message[gid] = None
-
-        logger.debug(str(data))
-        # 如果这条消息已经复读过了就不参与复读了
-        if not has_repeated.get(gid) and data is not None:
-            has_repeated[gid] = True
-            await bot.send(event, data)
+            message_times[gid] += 1
+        logger.debug(f'已重复次数: {message_times.get(gid)}')
+        if message_times.get(gid) >= config.shortest_times:
+            logger.debug(f'原始的消息: {str(event.message)}')
+            logger.debug(f"欲发送信息: {raw_message}")
+            await bot.send_group_msg(group_id=event.group_id, message=raw_message, auto_escape=False)
+        last_message[gid] = message
