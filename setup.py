@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="nonebot-plugin-repeater",
-    version="3.0.2",
+    version="3.0.3",
     author="Kl1nge5",
     description="A plugin based on NoneBot2, auto +1 in group.",
     long_description=long_description,

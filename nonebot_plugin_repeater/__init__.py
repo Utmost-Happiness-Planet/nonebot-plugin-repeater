@@ -36,8 +36,8 @@ async def repeater(bot: Bot, event: GroupMessageEvent):
             message_times[gid] = 1
         else:
             message_times[gid] += 1
-        logger.debug(f'已重复次数: {message_times.get(gid)}')
-        if message_times.get(gid) >= config.shortest_times:
+        logger.debug(f'已重复次数: {message_times.get(gid)}/{config.shortest_times}')
+        if message_times.get(gid) == config.shortest_times:
             logger.debug(f'原始的消息: {str(event.message)}')
             logger.debug(f"欲发送信息: {raw_message}")
             await bot.send_group_msg(group_id=event.group_id, message=raw_message, auto_escape=False)
