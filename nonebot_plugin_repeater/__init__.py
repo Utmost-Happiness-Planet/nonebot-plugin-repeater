@@ -27,7 +27,7 @@ def messagePreprocess(message: str):
 @m.handle()
 async def repeater(bot: Bot, event: GroupMessageEvent):
     gid = str(event.group_id)
-    if gid in repeater_group:
+    if gid in repeater_group or "all" in repeater_group:
         global last_message, message_times
         message, raw_message = messagePreprocess(str(event.message))
         logger.debug(f'这一次消息: {message}')

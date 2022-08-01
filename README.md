@@ -17,7 +17,7 @@
 三个全局配置：
 
 ```python
-repeater_group = ["<群号1>", "<群号2>"]  # 支持复读的群号
+repeater_group = ["<群号1>", "<群号2>"]  # 支持复读的群号，群号设置为 all 可以默认所有群聊开启
 repeater_min_message_length = 1  # 触发复读的文本消息最小长度（表情和图片无此限制）
 repeater_min_message_times = 2  # 触发复读的消息次数
 ```
