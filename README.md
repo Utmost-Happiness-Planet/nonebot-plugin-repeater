@@ -1,3 +1,7 @@
+⚠由于本人懒惰，PyPi不会及时更新（万恶的2FA验证），请于此仓库获取插件最新版本。
+
+---
+
 <div align="center">
 
   # Repeater
