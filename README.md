@@ -1,4 +1,9 @@
-⚠由于本人懒惰，PyPi不会及时更新（万恶的2FA验证），请于此仓库获取插件最新版本。
+⚠本插件目前已无人维护，请移步其他复读插件吧：
+
+- https://github.com/yejue/nonebot-plugin-plus-one
+- https://github.com/Redmomn/nonebot-plugin-pallas-repeater
+
+~~⚠由于本人懒惰，PyPi不会及时更新（万恶的2FA验证），请于此仓库获取插件最新版本。~~
 
 ---
 
